@@ -1,7 +1,12 @@
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
-from django import forms
+import uuid
+from datetime import timedelta
 
-from .models import User
+from django import forms
+from django.contrib.auth.forms import (AuthenticationForm, UserChangeForm,
+                                       UserCreationForm)
+from django.utils.timezone import now
+
+from users.models import EmailVerification, User
 
 
 class UserLoginForm(AuthenticationForm):
@@ -15,7 +20,9 @@ class UserLoginForm(AuthenticationForm):
         model = User
         fields = ('username', 'password')
 
-    def __init__(self, *args, **kwargs):  # взял из документации, тоже что добавить в attrs username и password 'class': 'form-control py-4' уменьшение кода
+# взял из документации, тоже что добавить в attrs username и password 'class': 'form-control py-4' уменьшение кода
+    def __init__(self, *args,
+                 **kwargs):
         super(UserLoginForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
@@ -38,6 +45,13 @@ class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2')
+
+    def save(self, commit=True):
+        user = super(UserRegistrationForm, self).save(commit=True)
+        expiration = now() + timedelta(hours=48)
+        record = EmailVerification.objects.create(code=uuid.uuid4(), user=user, expiration=expiration)
+        record.send_verification_email()
+        return user
 
     def __init__(self, *args, **kwargs):
         super(UserRegistrationForm, self).__init__(*args, **kwargs)

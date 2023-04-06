@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
-from .models import *
+
+from .models import Basket, Product, ProductCategory
 
 
 class BasketAdminInline(admin.TabularInline):
