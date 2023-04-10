@@ -14,7 +14,8 @@ class BasketAdminInline(admin.TabularInline):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'price', 'quantity', 'category', 'get_html_photo')
-    fields = ('name', 'image', 'description', 'short_description', ('price', 'quantity'), 'category')
+    fields = ('name', 'image', 'description', 'short_description', ('price', 'quantity'), 'stripe_product_price_id',
+              'category')
     # readonly_fields = ('short_description',)
     ordering = ['-name']
     search_fields = ['name']

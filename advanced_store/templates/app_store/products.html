@@ -17,12 +17,15 @@
         <div class="col-lg-3">
 
             <h1 class="my-4">Store</h1>
+            {% cache 10 object %}
             <div class="list-group">
                 <a href="{% url 'products' %} " class="list-group-item">All</a>
+
                 {% for category in categories %}
                 <a href="{% url 'category' category.id %}" class="list-group-item">{{category.name}}</a>
                 {% endfor %}
             </div>
+            {% endcache %}
 
         </div>
         <!-- /.col-lg-3 -->
@@ -59,7 +62,7 @@
                 </a>
             </div>
 
-            {% cache 30 products %}
+
             <div class="row">
                 {% for product in products %}
                 <div class="col-lg-4 col-md-6 mb-4">
@@ -89,7 +92,7 @@
 
 
             </div>
-            {% endcache %}
+
 
             {% if is_paginated %}
             <nav aria-label="Page navigation example">
@@ -116,6 +119,7 @@
                 </ul>
             </nav>
             {% endif %}
+
         </div>
 
     </div>

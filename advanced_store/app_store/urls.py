@@ -3,6 +3,7 @@ from django.views.decorators.cache import cache_page
 
 from app_store.views import ProductListView, basket_add, basket_del
 
+
 urlpatterns = [
     # path('', cache_page(60 * 1)(ProductListView.as_view()), name='products'),
     path('', ProductListView.as_view(), name='products'),
